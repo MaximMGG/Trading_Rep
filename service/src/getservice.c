@@ -37,6 +37,9 @@ static char *send_request(char *request) {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *) &ch);
 
     res = curl_easy_perform(curl);
+    if (res != 0) {
+        fprintf(stderr, "Perform error %s\n", curl_easy_strerror(res));
+    }
 
     char *result = malloc(ch.size);
     strcpy(result, ch.response);
@@ -46,14 +49,17 @@ static char *send_request(char *request) {
 
 
 
-Response *send_get_ticker_request(char *ticker) {
-    Response *response = (Response *) malloc(sizeof(Response));
+Res_ticker *send_get_ticker_request(char *ticker) {
+    Res_ticker *response = (Res_ticker *) malloc(sizeof(Res_ticker));
+    tryp(response);
 
     char req_body[BODY_LEN];
     snprintf(req_body, BODY_LEN, GET_REQUEST, ticker);
     char *response_str = send_request(req_body);
+    tryp(response_str);
     int size = 0;
     Property **pr = parse_get_response(response_str, &size);
+    tryp(pr);
     set_property_in_struct_map(size, response, pr);
 
     free_property(pr, size);
