@@ -1,8 +1,8 @@
 #include "../headers/getservice.h"
 #include <curl/curl.h>
-#include <curl/easy.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <util/pr_map.h>
 
 #define BODY_LEN 128
 
@@ -32,7 +32,7 @@ static char *send_request(char *request) {
     struct mem ch = {0};
     CURLcode res;
     CURL *curl = curl_easy_init();
-    curl_easy_setopt(curl, CURLOPT_URL, NULL);
+    curl_easy_setopt(curl, CURLOPT_URL, request);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_func);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *) &ch);
 
@@ -40,6 +40,7 @@ static char *send_request(char *request) {
 
     char *result = malloc(ch.size);
     strcpy(result, ch.response);
+    curl_easy_cleanup(curl);
     return result;
 }
 
@@ -47,10 +48,16 @@ static char *send_request(char *request) {
 
 Response *send_get_ticker_request(char *ticker) {
     Response *response = (Response *) malloc(sizeof(Response));
+
     char req_body[BODY_LEN];
     snprintf(req_body, BODY_LEN, GET_REQUEST, ticker);
     char *response_str = send_request(req_body);
+    int size = 0;
+    Property **pr = parse_get_response(response_str, &size);
+    set_property_in_struct_map(size, response, pr);
 
+    free_property(pr, size);
+    free(response_str);
 
     return response;
 }
