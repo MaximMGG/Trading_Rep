@@ -2,6 +2,8 @@
 #define _GETSERVICE_H_
 
 #include "tokens.h"
+#include <util/util.h>
+#include <util/pr_map.h>
 
 //standart get requst for getting respons with ticker info
 #define GET_REQUEST "api1.binance.com/api/v3/ticker?symbol=%s"
@@ -29,6 +31,7 @@ struct respons {
 
 typedef struct respons Response;
 
+//send request and return struct Response 
 Response *send_get_ticker_request(char *ticker);
 
 
