@@ -1,7 +1,7 @@
 #include "../headers/dbinsert.h"
 #include <libpq-fe.h>
 
-#define PROPERTY_LEN 2048
+#define PROPERTY_LEN 1024
 
 
 PGconn *db_connectdb() {
@@ -21,17 +21,36 @@ PGconn *db_connectdb() {
     return conn;
 }
 
-//TODO (maxim) need to write whis functional!
 int db_insert_ticker_response(Res_ticker *resp, PGconn *conn) {
     char *insert_msg = (char *) malloc(PROPERTY_LEN);
     tryp(insert_msg);
-
     PGresult *res;
-    
-    strcpy(insert_msg, "%s");
+    snprintf(insert_msg, PROPERTY_LEN, "%s, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %ld, %ld, %ld, %ld, %ld",
+                            resp->symbol,
+                            resp->priceChange, 
+                            resp->priceChangePercent,
+                            resp->weightedAvgPrice,
+                            resp->openPrice,
+                            resp->highPrice,
+                            resp->lowPrice,
+                            resp->lastPrice,
+                            resp->volume,
+                            resp->quoteVolume,
+                            resp->openTime,
+                            resp->closeTime,
+                            resp->firstId,
+                            resp->lastId,
+                            resp->count
+                            );
+    res = PQexec(conn, insert_msg);
 
-    
-
-
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+        fprintf(stderr, "Con not insert in db %s\n", PQerrorMessage(conn));
+    }
+    PQclear(res);
     return 0;
 };
+
+void db_finish(PGconn *conn) {
+    PQfinish(conn);
+}
