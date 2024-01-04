@@ -17,7 +17,7 @@ struct dbconn_info {
 PGconn *db_connectdb();
 
 //insert in db Response **resp
-int db_insert_ticker_response(Property **response, PGconn *conn);
+int db_insert_ticker_response(Res_ticker *resp, PGconn *conn);
 
 
 #endif //_DB_INSERT_H_

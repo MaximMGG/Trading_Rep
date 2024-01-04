@@ -22,7 +22,7 @@ PGconn *db_connectdb() {
 }
 
 //TODO (maxim) need to write whis functional!
-int db_insert_ticker_response(Property **response, PGconn *conn) {
+int db_insert_ticker_response(Res_ticker *resp, PGconn *conn) {
     char *insert_msg = (char *) malloc(PROPERTY_LEN);
     tryp(insert_msg);
 
@@ -31,8 +31,6 @@ int db_insert_ticker_response(Property **response, PGconn *conn) {
     strcpy(insert_msg, "%s");
 
     
-
-
 
 
     return 0;
