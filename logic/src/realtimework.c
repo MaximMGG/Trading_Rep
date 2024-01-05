@@ -2,7 +2,6 @@
 
 
 
-
 void put_ticker_info(Res_ticker *res) {
-    printf("%s %ld", res->symbol, res->openTime);
+    fprintf(stdout, "%s %ld\n", res->symbol, res->openTime);
 }

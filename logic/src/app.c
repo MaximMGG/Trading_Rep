@@ -16,6 +16,7 @@ void candle_manage() {
             prev = res;
         } else {
             if (prev->openTime != res->openTime) {
+                prev = res;
                 db_insert_ticker_response(res, conn);
             }
         }

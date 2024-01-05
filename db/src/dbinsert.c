@@ -8,9 +8,9 @@ PGconn *db_connectdb() {
     char con_inf[256] = {0};
 
     snprintf(con_inf, 256, "user=%s dbname=%s password=%s",
-            get_property_from_file(NULL, "user"),
-            get_property_from_file(NULL, "dbname"),
-            get_property_from_file(NULL, "password")
+            get_property_from_file("db/res/property.conf", "user"),
+            get_property_from_file("db/res/property.conf", "dbname"),
+            get_property_from_file("db/res/property.conf", "password")
             );
 
     PGconn *conn = PQconnectdb(con_inf);
@@ -25,7 +25,9 @@ int db_insert_ticker_response(Res_ticker *resp, PGconn *conn) {
     char *insert_msg = (char *) malloc(PROPERTY_LEN);
     tryp(insert_msg);
     PGresult *res;
-    snprintf(insert_msg, PROPERTY_LEN, "%s, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %ld, %ld, %ld, %ld, %ld",
+    snprintf(insert_msg, PROPERTY_LEN, "insert into ticker(symbol, priceChange, priceChangePercent, weightedAvgPrice, openPrice, highPrice, "
+            "lowPrice, lastPrice, volume, quoteVolume, openTime, closeTime, firstId, lastId, count) values ("
+            "'%s', %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %ld, %ld, %ld, %ld, %ld);",
                             resp->symbol,
                             resp->priceChange, 
                             resp->priceChangePercent,
