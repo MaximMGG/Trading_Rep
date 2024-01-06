@@ -21,13 +21,13 @@ PGconn *db_connectdb() {
     return conn;
 }
 
-int db_insert_ticker_response(Res_ticker *resp, PGconn *conn) {
+int db_insert_ticker_response(Res_ticker *resp, PGconn *conn, int time) {
     char *insert_msg = (char *) malloc(PROPERTY_LEN);
     tryp(insert_msg);
     PGresult *res;
-    snprintf(insert_msg, PROPERTY_LEN, "insert into ticker(symbol, priceChange, priceChangePercent, weightedAvgPrice, openPrice, highPrice, "
+    snprintf(insert_msg, PROPERTY_LEN, "insert into ticker_%d(symbol, priceChange, priceChangePercent, weightedAvgPrice, openPrice, highPrice, "
             "lowPrice, lastPrice, volume, quoteVolume, openTime, closeTime, firstId, lastId, count) values ("
-            "'%s', %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %ld, %ld, %ld, %ld, %ld);",
+            "'%s', %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %ld, %ld, %ld, %ld, %ld);", time, 
                             resp->symbol,
                             resp->priceChange, 
                             resp->priceChangePercent,

@@ -19,7 +19,7 @@ PGconn *db_connectdb();
 void db_finish(PGconn *conn);
 
 //insert in db Response **resp
-int db_insert_ticker_response(Res_ticker *resp, PGconn *conn);
+int db_insert_ticker_response(Res_ticker *resp, PGconn *conn, int time);
 
 
 #endif //_DB_INSERT_H_
