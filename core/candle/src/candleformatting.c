@@ -1,4 +1,9 @@
 #include "../headers/candleformatting.h"
+#include <threads.h>
+
+
+static mtx_t format_mutex;
+
 
 static int time_format_t;
 static Res_ticker res_m1;
@@ -11,17 +16,24 @@ void format_init(int time_format) {
     time_format_t = time_format;
 }
 
-void format_store(Res_ticker *res) {
+int format_store(void *ptr) {
+    mtx_lock(&format_mutex);
+    Res_ticker *res = (Res_ticker *) ptr;
     if (time_format_t & MINUTE_1) {
         if (res_m1.symbol == NULL) {
             res_m1 = *res;
         }
         if (res_m1.openTime != res->openTime) {
-
+            db_insert_ticker_response(res, 1);
+            res_m1 = *res;
         }
     }
     if (time_format_t & MINUTE_5) {
         if (res_m5.symbol == NULL) {
+            res_m5 = *res;
+        }
+        if (res_m5.openTime != res->openTime) {
+            db_insert_ticker_response(res, 5);
             res_m5 = *res;
         }
     }
@@ -29,9 +41,17 @@ void format_store(Res_ticker *res) {
         if (res_m15.symbol == NULL) {
             res_m15 = *res;
         }
+        if (res_m15.openTime != res->openTime) {
+            db_insert_ticker_response(res, 15);
+            res_m15 = *res;
+        }
     }
     if (time_format_t & MINUTE_30) {
         if (res_m30.symbol == NULL) {
+            res_m30 = *res;
+        }
+        if (res_m30.openTime != res->openTime) {
+            db_insert_ticker_response(res, 30);
             res_m30 = *res;
         }
     }
@@ -39,5 +59,11 @@ void format_store(Res_ticker *res) {
         if (res_m60.symbol == NULL) {
             res_m60 = *res;
         }
+        if (res_m60.openTime != res->openTime) {
+            db_insert_ticker_response(res, 60);
+            res_m60 = *res;
+        }
     }
+    mtx_unlock(&format_mutex);
+    return 0;
 }

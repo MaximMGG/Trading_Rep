@@ -2,6 +2,7 @@
 #define _CANDLEFORMATTING_H_
 
 #include "../../../service/headers/getservice.h"
+#include "../../../db/headers/dbinsert.h"
 
 typedef enum {
     MINUTE_1 = 0b01,
@@ -13,7 +14,7 @@ typedef enum {
 
 void format_init(int time_format);
 
-void format_store(Res_ticker *res);
+int format_store(void *);
 
 
 #endif //_CANDLEFORMATTING_H_

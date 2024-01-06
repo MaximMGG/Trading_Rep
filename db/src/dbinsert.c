@@ -3,6 +3,7 @@
 
 #define PROPERTY_LEN 1024
 
+static PGconn *conn;
 
 PGconn *db_connectdb() {
     char con_inf[256] = {0};
@@ -13,7 +14,7 @@ PGconn *db_connectdb() {
             get_property_from_file("db/res/property.conf", "password")
             );
 
-    PGconn *conn = PQconnectdb(con_inf);
+    conn = PQconnectdb(con_inf);
     if (PQstatus(conn) != CONNECTION_OK) {
         fprintf(stderr, "Connection to db error %s", PQerrorMessage(conn));
     }
@@ -21,7 +22,7 @@ PGconn *db_connectdb() {
     return conn;
 }
 
-int db_insert_ticker_response(Res_ticker *resp, PGconn *conn, int time) {
+int db_insert_ticker_response(Res_ticker *resp, int time) {
     char *insert_msg = (char *) malloc(PROPERTY_LEN);
     tryp(insert_msg);
     PGresult *res;
