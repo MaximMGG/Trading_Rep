@@ -11,6 +11,8 @@ static Res_ticker res_m5;
 static Res_ticker res_m15;
 static Res_ticker res_m30;
 static Res_ticker res_m60;
+static time_t t;
+static struct tm *tm;
 
 void format_init(int time_format) {
     time_format_t = time_format;
@@ -18,6 +20,10 @@ void format_init(int time_format) {
 
 int format_store(void *ptr) {
     mtx_lock(&format_mutex);
+
+    t = time(&t);
+    tm = localtime(&t);
+
     Res_ticker *res = (Res_ticker *) ptr;
     if (time_format_t & MINUTE_1) {
         if (res_m1.symbol == NULL) {
@@ -32,7 +38,7 @@ int format_store(void *ptr) {
         if (res_m5.symbol == NULL) {
             res_m5 = *res;
         }
-        if (res_m5.openTime != res->openTime) {
+        if (res_m5.openTime != res->openTime && (tm->tm_min % 5) == 0) {
             db_insert_ticker_response(res, 5);
             res_m5 = *res;
         }
@@ -41,7 +47,7 @@ int format_store(void *ptr) {
         if (res_m15.symbol == NULL) {
             res_m15 = *res;
         }
-        if (res_m15.openTime != res->openTime) {
+        if (res_m15.openTime != res->openTime && (tm->tm_min % 15) == 0) {
             db_insert_ticker_response(res, 15);
             res_m15 = *res;
         }
@@ -50,7 +56,7 @@ int format_store(void *ptr) {
         if (res_m30.symbol == NULL) {
             res_m30 = *res;
         }
-        if (res_m30.openTime != res->openTime) {
+        if (res_m30.openTime != res->openTime && (tm->tm_min % 30) == 0) {
             db_insert_ticker_response(res, 30);
             res_m30 = *res;
         }
@@ -59,7 +65,7 @@ int format_store(void *ptr) {
         if (res_m60.symbol == NULL) {
             res_m60 = *res;
         }
-        if (res_m60.openTime != res->openTime) {
+        if (res_m60.openTime != res->openTime && (tm->tm_min % 60) == 0) {
             db_insert_ticker_response(res, 60);
             res_m60 = *res;
         }

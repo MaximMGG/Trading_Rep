@@ -15,7 +15,7 @@ void candle_manage() {
     while(run) {
         Res_ticker *res = send_get_ticker_request(BTCUSDT);
         thrd_create(&t, &format_store, (void *) res);
-        format_store(res);
+        put_ticker_info(res);
     }
     db_finish(conn);
 }

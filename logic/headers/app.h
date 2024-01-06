@@ -3,7 +3,7 @@
 #include "../../service/headers/getservice.h"
 #include "../../db/headers/dbinsert.h"
 #include "../../core/candle/headers/candleformatting.h"
-
+#include "realtimework.h"
 
 
 //func for managing candles
