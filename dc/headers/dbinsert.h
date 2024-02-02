@@ -5,6 +5,7 @@
 #include <libpq-fe.h>
 #include <stdio.h>
 #include "../../service/headers/getservice.h"
+#include "../../lib/m_string.h"
 
 
 struct dbconn_info {
@@ -14,12 +15,12 @@ struct dbconn_info {
 };
 
 //init connect to db
-PGconn *db_connectdb();
+PGconn *db_connectdb(str *con);
 //free resourses
 void db_finish(PGconn *conn);
 
 //insert in db Response **resp
-int db_insert_ticker_response(Res_ticker *resp, int time);
+int db_insert_ticker_response(str *resp);
 
 
 #endif //_DB_INSERT_H_
