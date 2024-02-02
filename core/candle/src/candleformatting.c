@@ -1,4 +1,5 @@
 #include "../headers/candleformatting.h"
+#include "../../../logic/headers/realtimework.h"
 #include <threads.h>
 
 
@@ -31,6 +32,7 @@ int format_store(void *ptr) {
         }
         if (res_m1.openTime != res->openTime) {
             db_insert_ticker_response(res, 1);
+            add_candle_in_logic_engine(res, MINUTE_1);
             res_m1 = *res;
         }
     }
@@ -40,6 +42,8 @@ int format_store(void *ptr) {
         }
         if (res_m5.openTime != res->openTime && (tm->tm_min % 5) == 0) {
             db_insert_ticker_response(res, 5);
+            add_candle_in_logic_engine(res, MINUTE_5);
+            res_m1 = *res;
             res_m5 = *res;
         }
     }
@@ -49,6 +53,8 @@ int format_store(void *ptr) {
         }
         if (res_m15.openTime != res->openTime && (tm->tm_min % 15) == 0) {
             db_insert_ticker_response(res, 15);
+            add_candle_in_logic_engine(res, MINUTE_15);
+            res_m1 = *res;
             res_m15 = *res;
         }
     }
@@ -58,6 +64,8 @@ int format_store(void *ptr) {
         }
         if (res_m30.openTime != res->openTime && (tm->tm_min % 30) == 0) {
             db_insert_ticker_response(res, 30);
+            add_candle_in_logic_engine(res, MINUTE_30);
+            res_m1 = *res;
             res_m30 = *res;
         }
     }
@@ -67,6 +75,8 @@ int format_store(void *ptr) {
         }
         if (res_m60.openTime != res->openTime && (tm->tm_min % 60) == 0) {
             db_insert_ticker_response(res, 60);
+            add_candle_in_logic_engine(res, MINUTE_60);
+            res_m1 = *res;
             res_m60 = *res;
         }
     }
