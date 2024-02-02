@@ -24,6 +24,7 @@ int main() {
     List *ticker = list_create(0, M_STRUCT);
     ticker->struct_size = sizeof(Token_s);
     list_add(ticker, (Token_s *)create_token(BTCUSDT, T_TIME_60));
+    data_init();
 
     while(true) {
         for(int i = 0; i < ticker->len; i++) {

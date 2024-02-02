@@ -80,7 +80,7 @@ void data_distributor(Res_ticker *response, Time t) {
 void data_init() {
     str *db_conn_format = STR("user=%s dbname=%s password=%s", db_conn_format);
 
-    str *db_conn = str_format(db_conn, db_conn_format, 
+    str *db_conn = str_format(NULL, db_conn_format, 
                     get_property_from_file("dc/res/property.conf", "user"),
                     get_property_from_file("dc/res/property.conf", "dbname"),
                     get_property_from_file("dc/res/property.conf", "password"));
