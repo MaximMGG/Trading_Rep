@@ -73,7 +73,7 @@ void data_distributor(Res_ticker *response, Time t) {
         str_free(resp);
         str_free(resp_fmt);
 
-        //TODO(Maxim) send data in logic service
+        logic_trade_dispetcher(response, t);
     } else return;
 }
 

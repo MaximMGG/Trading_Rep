@@ -40,7 +40,6 @@ static char *send_request(char *request) {
 
     char *result = malloc(ch.size);
     strcpy(result, ch.response);
-    curl_easy_cleanup(curl);
     return result;
 }
 

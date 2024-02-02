@@ -1,4 +1,5 @@
 #include "../headers/logicservice.h"
+#include "../../trader/headers/trader.h"
 #include <string.h>
 
 #define null NULL
@@ -46,6 +47,11 @@ static Target *whatch_target(Res_ticker *res, int t) {
             else 
                 target->predict = target->trade->type == BUY ? ON_LONG_TRADE : ON_SHORT_TRADE;
         }
+    }else {
+        if (target_pos == TARGETS_IS_NULL) {
+            targets = list_create(0, M_STRUCT);
+            targets->struct_size = sizeof(Target);
+        } 
     }
     return null;
 }
@@ -78,7 +84,7 @@ void logic_trade_dispetcher(Res_ticker *res, int t) {
                                  }
                                  trade->enter_price = res->lastPrice;
                                  //TODO(Maxim) do trade logic
-                                 //trader_trade(trade);
+                                 trader_trade(target);
                                  target->last_trade = NONE;
                                  target->last_price = res->lastPrice;
                                  target->trade = trade;
@@ -96,7 +102,7 @@ void logic_trade_dispetcher(Res_ticker *res, int t) {
                                   }
                                   trade->enter_price = res->lastPrice;
                                   //TODO(Maxim) do trade logic
-                                  //trader_trade(trade);
+                                  trader_trade(target);
                                   target->last_trade = NONE;
                                   target->last_price = res->lastPrice;
                                   target->trade = trade;
@@ -108,7 +114,8 @@ void logic_trade_dispetcher(Res_ticker *res, int t) {
                                break;
                            }
              case ON_LONG_TRADE: {
-                                     //TODO (Maxim) trader_close_trade(target->trade);
+                                     trader_close_trade(target);
+                                     printf("%lf", depo->total);
                                      double current_profit = (res->lastPrice - target->trade->enter_price) * target->trade->size;
                                      if (current_profit > 0) {
                                          target->lose_count = 0;
@@ -124,7 +131,8 @@ void logic_trade_dispetcher(Res_ticker *res, int t) {
                                      break;
                                  }
              case ON_SHORT_TRADE: {
-                                      //TODO (Maxim) trader_close_trade(target->trade);
+                                      trader_close_trade(target);
+                                      printf("%lf", depo->total);
                                       double current_profit = (target->trade->enter_price - res->lastPrice) * target->trade->size;
                                       if (current_profit > 0) {
                                           target->lose_count = 0;

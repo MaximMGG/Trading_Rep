@@ -55,7 +55,8 @@ static str *str_format_insert(str *dest, void *buf, size_t buf_size) {
         l_buf[j++] = dest->str[i];
     }
     int buf_len = strlen(l_buf);
-    dest->str = (char *) realloc(dest->str, buf_len);
+    free(dest->str);
+    dest->str = (char *) malloc(buf_len);
     dest->len = buf_len;
     if (dest->str == NULL) {
         fprintf(stderr, "str_format_insert error, cant realloc string\n");

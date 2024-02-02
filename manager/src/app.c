@@ -25,11 +25,14 @@ int main() {
     ticker->struct_size = sizeof(Token_s);
     list_add(ticker, (Token_s *)create_token(BTCUSDT, T_TIME_60));
     data_init();
+    logic_create_deposit(1000.0, 10);
 
     while(true) {
         for(int i = 0; i < ticker->len; i++) {
             data_distributor(send_get_ticker_request(BTCUSDT), T_TIME_60);
         }
     }
+
+
     return 0;
 }
