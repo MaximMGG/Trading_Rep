@@ -1,8 +1,10 @@
 #include "../headers/logicservice.h"
 #include <string.h>
 
-static List *trades = NULL;
+#define null NULL
+
 static List *targets = NULL;
+static DEPOSIT *depo;
 
 static int targets_contein(char *ticker, int t) {
     if (targets == NULL) return TARGETS_IS_NULL;
@@ -20,36 +22,135 @@ static int targets_contein(char *ticker, int t) {
 }
 
 
-static predict whatch_target(Res_ticker *res, int t) {
+static Target *whatch_target(Res_ticker *res, int t) {
     int target_pos = 0;
     if ((target_pos = targets_contein(res->symbol, t)) > 0) {
         Target *target = (Target *)list_get(targets, target_pos);
         if (res->lastPrice > target->last_price) {
-            return MAYBE_BUY;
+            if (target->trade == NULL) {
+                target->predict = MAYBE_BUY;
+                return target;
+            } else {
+                target->predict = target->trade->type == BUY ? ON_LONG_TRADE : ON_SHORT_TRADE;
+            }
         } else if (res->lastPrice < target->last_price) {
-            return MAYBE_SELL;
+            if (target->trade == NULL) {
+                target->predict = MAYBE_SELL;
+                return target;
+            } else {
+                target->predict = target->trade->type == BUY ? ON_LONG_TRADE : ON_SHORT_TRADE;
+            }
         } else {
-            return EQUALSE;
+            if (target->trade == NULL)
+                target->predict = EQUALSE;
+            else 
+                target->predict = target->trade->type == BUY ? ON_LONG_TRADE : ON_SHORT_TRADE;
         }
-    } else {
-        if (target_pos == TARGETS_IS_NULL) {
-            targets = list_create(0, M_STRUCT);
-            targets->struct_size = sizeof(Target);
-            return NOTHING;
-        }
-        Target *target = (Target *) malloc(sizeof(Target));
-        str *ticker = STR(res->symbol, ticker);
-        target->ticker = ticker;
-        target->last_price = res->lastPrice;
-        target->time_type = t;
-        list_add(targets, target);
     }
-    return NOTHING;
+    return null;
 }
 
 void logic_trade_dispetcher(Res_ticker *res, int t) {
-    if (trades == NULL) {
-        whatch_target(res, t);
-        
-    }
+     Target *target = whatch_target(res, t);
+     if (target == null) {
+         target = (Target *) malloc(sizeof(Target));
+         str *ticker = STR(res->symbol, ticker);
+         target->ticker = ticker;
+         target->trade = NULL;
+         target->predict = NOTHING;
+         target->time_type = t;
+         target->last_price = res->lastPrice;
+         target->lose_count = 0;
+         target->last_trade = NONE;
+
+         list_add(targets, target);
+     } else {
+         switch(target->predict) {
+             case MAYBE_BUY: {
+                                 if (target->last_trade == BUY) {
+                                     break;
+                                 }
+                                 Trade *trade = (Trade *) malloc(sizeof(Trade));
+                                 trade->type = BUY;
+                                 trade->size = (1 * depo->start_trade_size) / res->lastPrice;
+                                 for(int i = 0; i < target->lose_count; i++) {
+                                     trade->size *= 2;
+                                 }
+                                 trade->enter_price = res->lastPrice;
+                                 //TODO(Maxim) do trade logic
+                                 //trader_trade(trade);
+                                 target->last_trade = NONE;
+                                 target->last_price = res->lastPrice;
+                                 target->trade = trade;
+                                 break;
+                             }
+             case MAYBE_SELL: {
+                                  if (target->last_trade == SELL) {
+                                      break;
+                                  }
+                                  Trade *trade = (Trade *) malloc(sizeof(Trade));
+                                  trade->type = SELL;
+                                  trade->size = (1 * depo->start_trade_size) / res->lastPrice;
+                                  for(int i = 0; i < target->lose_count; i++) {
+                                      trade->size *= 2;
+                                  }
+                                  trade->enter_price = res->lastPrice;
+                                  //TODO(Maxim) do trade logic
+                                  //trader_trade(trade);
+                                  target->last_trade = NONE;
+                                  target->last_price = res->lastPrice;
+                                  target->trade = trade;
+                                  break;
+                              }
+             case EQUALSE: {
+                               //nothing
+
+                               break;
+                           }
+             case ON_LONG_TRADE: {
+                                     //TODO (Maxim) trader_close_trade(target->trade);
+                                     double current_profit = (res->lastPrice - target->trade->enter_price) * target->trade->size;
+                                     if (current_profit > 0) {
+                                         target->lose_count = 0;
+                                     } else {
+                                         target->lose_count++;
+                                     }
+                                     depo->total += current_profit;
+                                     target->last_trade = BUY;
+                                     free(target->trade);
+                                     target->trade = NULL;
+                                     target->last_price = res->lastPrice;
+                                     target->predict = NOTHING;
+                                     break;
+                                 }
+             case ON_SHORT_TRADE: {
+                                      //TODO (Maxim) trader_close_trade(target->trade);
+                                      double current_profit = (target->trade->enter_price - res->lastPrice) * target->trade->size;
+                                      if (current_profit > 0) {
+                                          target->lose_count = 0;
+                                      } else {
+                                          target->lose_count++;
+                                      }
+                                      depo->total += current_profit;
+                                      target->last_trade = SELL;
+                                      free(target->trade);
+                                      target->trade = NULL;
+                                      target->last_price = res->lastPrice;
+                                      target->predict = NOTHING;
+                                      break;
+                                  }
+             case NOTHING: {
+                               //nothing
+                               break;
+                           }
+         }
+     }
+}
+
+
+DEPOSIT *logic_create_deposit(double total, int devide_step) {
+    depo = (DEPOSIT *) malloc(sizeof(DEPOSIT));
+    depo->total = total;
+    depo->start_trade_size = total / devide_step;
+    return depo;
 }
