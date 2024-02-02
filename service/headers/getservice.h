@@ -27,15 +27,12 @@ struct ticker_respons {
     long lastId;
     long count;
 };
-
 typedef struct ticker_respons Res_ticker;
 
 //send request and return struct Response 
-//Response malloced, need to free by collie
+//Response allocated, need to free by collier
 Res_ticker *send_get_ticker_request(char *ticker);
 
-//map property to ticker_respons struct convert all string values to double/int
-Res_ticker *map_property_to_ticker(Property **prop, Res_ticker *res);
 
 
 #endif //_GETSERVICE_H_

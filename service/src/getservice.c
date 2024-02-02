@@ -11,7 +11,6 @@ struct mem {
     size_t size;
 };
 
-
 static size_t write_func(void *data, size_t size, size_t nmemb, void *clientp) {
     size_t realsize = size * nmemb;
     struct mem *m = (struct mem *) clientp;
@@ -25,8 +24,6 @@ static size_t write_func(void *data, size_t size, size_t nmemb, void *clientp) {
 
     return realsize;
 }
-
-
 
 static char *send_request(char *request) {
     struct mem ch = {0};
@@ -47,7 +44,25 @@ static char *send_request(char *request) {
     return result;
 }
 
-
+static Res_ticker *map_property_to_ticker(Property **prop, Res_ticker *res) {
+    res->symbol = (char *) malloc(sizeof(prop[0]->val));
+    strcpy(res->symbol, prop[0]->val);
+    res->priceChange = atof(prop[1]->val);
+    res->priceChangePercent = atof(prop[2]->val);
+    res->weightedAvgPrice = atof(prop[3]->val);
+    res->openPrice = atof(prop[4]->val);
+    res->highPrice = atof(prop[5]->val);
+    res->lowPrice = atof(prop[6]->val);
+    res->lastPrice = atof(prop[7]->val);
+    res->volume = atof(prop[8]->val);
+    res->quoteVolume = atof(prop[9]->val);
+    res->openTime = atol(prop[10]->val);
+    res->closeTime = atol(prop[11]->val);
+    res->firstId = atol(prop[12]->val);
+    res->lastId = atol(prop[13]->val);
+    res->count = atol(prop[14]->val);
+    return res;
+}
 
 Res_ticker *send_get_ticker_request(char *ticker) {
     Res_ticker *response = (Res_ticker *) malloc(sizeof(Res_ticker));
@@ -68,24 +83,3 @@ Res_ticker *send_get_ticker_request(char *ticker) {
     return response;
 }
 
-
-
-Res_ticker *map_property_to_ticker(Property **prop, Res_ticker *res) {
-    res->symbol = (char *) malloc(sizeof(prop[0]->val));
-    strcpy(res->symbol, prop[0]->val);
-    res->priceChange = atof(prop[1]->val);
-    res->priceChangePercent = atof(prop[2]->val);
-    res->weightedAvgPrice = atof(prop[3]->val);
-    res->openPrice = atof(prop[4]->val);
-    res->highPrice = atof(prop[5]->val);
-    res->lowPrice = atof(prop[6]->val);
-    res->lastPrice = atof(prop[7]->val);
-    res->volume = atof(prop[8]->val);
-    res->quoteVolume = atof(prop[9]->val);
-    res->openTime = atol(prop[10]->val);
-    res->closeTime = atol(prop[11]->val);
-    res->firstId = atol(prop[12]->val);
-    res->lastId = atol(prop[13]->val);
-    res->count = atol(prop[14]->val);
-    return res;
-}
