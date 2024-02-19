@@ -3,7 +3,7 @@
 
 #define PROPERTY_LEN 1024
 
-static PGconn *conn;
+static PGconn *conn = NULL;
 
 PGconn *db_connectdb(str *con) {
 
