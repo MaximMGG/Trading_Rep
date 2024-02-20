@@ -16,8 +16,12 @@ typedef struct {
     time c_time;
 } Candle;
 
+typedef struct {
+
+} Quotes;
 
 Candle Candle_new(double max_value, double min_value, double open_price, double current_price, double value, time c_time);
+
 
 
 
