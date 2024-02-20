@@ -45,11 +45,10 @@ static _Bool new_candle(long cur_time, Time t) {
 
 void data_distributor(Res_ticker *response, Time t) {
     if (new_candle(response->openTime, t)) {
-        str *resp_fmt = STR("insert into ticker_%d"
+        str *resp_fmt = newstr("insert into ticker_%d"
                 "(symbol, priceChange, priceChangePercent, weightedAvgPrice, openPrice, highPrice, "
                 "lowPrice, lastPrice, volume, quoteVolume, openTime, closeTime, firstId, lastId, count) values"
-                "('%s', %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %ld, %ld, %ld, %ld, %ld);"
-                , resp_fmt);
+                "('%s', %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %ld, %ld, %ld, %ld, %ld);");
 
         str *resp = str_format(NULL, resp_fmt, t,
                 response->symbol,
@@ -78,7 +77,7 @@ void data_distributor(Res_ticker *response, Time t) {
 }
 
 void data_init() {
-    str *db_conn_format = STR("user=%s dbname=%s password=%s", db_conn_format);
+    str *db_conn_format = newstr("user=%s dbname=%s password=%s");
 
     str *db_conn = str_format(NULL, db_conn_format, 
                     get_property_from_file("dc/res/property.conf", "user"),

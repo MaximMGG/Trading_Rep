@@ -8,7 +8,7 @@ typedef struct {
 
 Token_s *create_token(char *ticker, int t) {
     Token_s *temp = (Token_s *) malloc(sizeof(Token_s));
-    str *s = STR(ticker, s);
+    str *s = newstr(ticker);
 
     temp->token = s;
     temp->time = t;

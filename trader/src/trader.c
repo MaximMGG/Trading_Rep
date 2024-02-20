@@ -1,4 +1,5 @@
 #include "../headers/trader.h"
+#include <stdio.h>
 
 int trader_trade(Target *target) {
     if (target->trade->type == BUY) {

@@ -1,6 +1,8 @@
 #include "../headers/logicservice.h"
 #include "../../trader/headers/trader.h"
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define null NULL
 
@@ -60,7 +62,7 @@ void logic_trade_dispetcher(Res_ticker *res, int t) {
      Target *target = whatch_target(res, t);
      if (target == null) {
          target = (Target *) malloc(sizeof(Target));
-         str *ticker = STR(res->symbol, ticker);
+         str *ticker = newstr(res->symbol);
          target->ticker = ticker;
          target->trade = NULL;
          target->predict = NOTHING;

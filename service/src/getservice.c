@@ -1,8 +1,9 @@
 #include "../headers/getservice.h"
 #include <curl/curl.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <util/pr_map.h>
+#include <util/util.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define BODY_LEN 128
 

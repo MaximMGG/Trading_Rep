@@ -9,10 +9,10 @@ LIBS = -l_util -lcurl -lpq
 all: $(BINARY)
 
 $(BINARY): $(OBJ)
-	$(CC) -o $(BINARY) $^ $(LIBS)
+	$(CC) -o $(BINARY) $^ $(LIBS) -g
 
 %.o:%.c
-	$(CC) -c -o $@ $<
+	$(CC) -c -o $@ $< -g
 
 clean:
 	rm $(BINARY) $(OBJ)

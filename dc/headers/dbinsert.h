@@ -5,7 +5,7 @@
 #include <libpq-fe.h>
 #include <stdio.h>
 #include "../../service/headers/getservice.h"
-#include "../../lib/m_string.h"
+#include <util/m_string.h>
 
 
 struct dbconn_info {

@@ -2,7 +2,6 @@
 #define _GETSERVICE_H_
 
 #include "tokens.h"
-#include <util/util.h>
 #include <util/pr_map.h>
 
 //standart get requst for getting respons with ticker info

@@ -2,8 +2,8 @@
 #define _LOGIC_H_
 #include "getservice.h"
 #include "tokens.h"
-#include "../../lib/m_string.h"
-#include "../../lib/m_list.h"
+#include <util/m_list.h>
+#include <util/m_string.h>
 
 typedef enum {
     BUY, SELL, NONE

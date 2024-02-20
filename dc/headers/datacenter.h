@@ -3,7 +3,7 @@
 #include "../../service/headers/getservice.h"
 #include "../../service/headers/logicservice.h"
 #include "dbinsert.h"
-#include "../../lib/m_string.h"
+#include <util/m_string.h>
 #include <util/util.h>
 
 typedef enum {
