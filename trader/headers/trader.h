@@ -1,6 +1,8 @@
 #ifndef _TRADER_H_
 #define _TRADER_H_
 
+#include <util/m_string.h>
+
 typedef enum {
     TRADE_ON_BUY, TRADE_ON_SELL, TRADE_NONE
 } Trade_status;
@@ -20,14 +22,20 @@ typedef struct {
 
 typedef struct {
     double open_price;
+    double profit;
+    double size;
+
     Trade_status tstatus;
     Trade_last tlast;
 
     Trade_predict *tpredict;
+    str *ticker;
 } Trade;
 
-TRADER_CODE Trader_create();
+Trade *Trader_create();
+TRADER_CODE Trader_trade(Trade *trader, str *ticker);
 
+void Trader_destory(Trade *trader);
 
 // int trader_trade(Target *target);
 // int trader_close_trade(Target *target);

@@ -32,6 +32,7 @@ typedef struct Quotes{
     u32 size;
     Trade_time t;
     void (*strategy) (struct Quotes *q);
+    Trade *trader;
 
     str *ticker;
 } Quotes;
