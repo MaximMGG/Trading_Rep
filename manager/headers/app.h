@@ -4,7 +4,7 @@
 #include "../../service/headers/getservice.h"
 #include "../../service/headers/tokens.h"
 #include "../../service/headers/candle.h"
-
+#include "../../service/headers/quote.h"
 
 
 #endif //_APP_

@@ -32,6 +32,12 @@ App_ *init_app(i32 argc, char **argv) {
 }
 
 
+void close_app(App_ *app) {
+    for(int i = 0; i < app->quotes_size; i++) {
+        Quotes_destroy(app->template[i]);
+    }
+}
+
 int main(i32 argc, char **argv) {
     App_ *app = init_app(argc, argv);
     data_init();
@@ -42,10 +48,13 @@ int main(i32 argc, char **argv) {
             Candle new = Candle_new(0, 0, res->lastPrice, res->openTime, res->lastPrice, res->volume, app->template[i]->t);
             if (Candle_check_time(app->template[i]->candles[app->template[i]->candle_size - 1], &new, app->template[i]->t) == NEW_CANDLE) {
                 Quotes_add_candle(app->template[i], &new);
-                Quotes_action(app->template[i], NULL);
-
+                Quotes_action(app->template[i]);
+                data_distributor(res, app->template[i]->t);
             }
         }
     }
+
+    data_close();
+    close_app(app);
     return 0;
 }

@@ -10,10 +10,11 @@ typedef enum {
 }Time;
 
 //take Res_ticker and put it in database and get it to logic service
-void data_distributor(Res_ticker *response, Time t);
+void data_distributor(Res_ticker *response, i32 t);
 
 //initialize database
 void data_init();
+void data_close();
 
 
 
