@@ -72,7 +72,6 @@ void data_distributor(Res_ticker *response, Time t) {
         str_free(resp);
         str_free(resp_fmt);
 
-        logic_trade_dispetcher(response, t);
     } else return;
 }
 

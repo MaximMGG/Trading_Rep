@@ -33,7 +33,7 @@ typedef struct {
 } Trade;
 
 Trade *Trader_create();
-TRADER_CODE Trader_trade(Trade *trader, str *ticker);
+TRADER_CODE Trader_trade(Trade *trader);
 
 void Trader_destory(Trade *trader);
 
