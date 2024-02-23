@@ -1,50 +1,9 @@
 #include "../headers/datacenter.h"
 
-static long time_1 = 0;
-static long time_5 = 0;
-static long time_15 = 0;
-static long time_30 = 0;
-static long time_60 = 0;
-
-static _Bool new_candle(long cur_time, Time t) {
-    switch (t) {
-        case T_TIME_1:
-            if (time_1 != cur_time) {
-                time_1 = cur_time;
-                return true;
-            }
-            break;
-        case T_TIME_5:
-            if (time_5 != cur_time) {
-                time_5 = cur_time;
-                return true;
-            }
-            break;
-        case T_TIME_15:
-            if (time_15 != cur_time) {
-                time_15 = cur_time;
-                return true;
-            }
-            break;
-        case T_TIME_30:
-            if (time_30 != cur_time) {
-                time_30 = cur_time;
-                return true;
-            }
-            break;
-        case T_TIME_60:
-            if (time_60 != cur_time) {
-                time_60 = cur_time;
-                return true;
-            }
-            break;
-    }
-    return false;
-}
 
 
 void data_distributor(Res_ticker *response, Time t) {
-    if (new_candle(response->openTime, t)) {
+    if (1) {
         str *resp_fmt = newstr("insert into ticker_%d"
                 "(symbol, priceChange, priceChangePercent, weightedAvgPrice, openPrice, highPrice, "
                 "lowPrice, lastPrice, volume, quoteVolume, openTime, closeTime, firstId, lastId, count) values"
@@ -87,3 +46,9 @@ void data_init() {
     str_free(db_conn_format);
     str_free(db_conn);
 }
+
+void data_close() {
+    db_finish();
+}
+
+

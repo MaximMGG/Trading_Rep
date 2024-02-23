@@ -1,8 +1,6 @@
 #include "../headers/candle.h"
 
 
-#define NEW_CANLDE 1
-#define SAME_CANDLE 0
 
 
 
@@ -22,14 +20,14 @@ i32 Candle_check_time(Candle *f, Candle *s, Trade_time t) {
     switch (t) {
         case C_MIN_1: {
             if (c_min == C_MIN_1) {
-                return NEW_CANLDE;
+                return NEW_CANDLE;
             } else {
                 return SAME_CANDLE;
             }
         } break;
         case C_MIN_5: {
             if (c_min == C_MIN_5) {
-                return NEW_CANLDE;
+                return NEW_CANDLE;
             } else {
                 return SAME_CANDLE;
             }
@@ -37,7 +35,7 @@ i32 Candle_check_time(Candle *f, Candle *s, Trade_time t) {
         } break;
         case C_MIN_15: {
             if (c_min == C_MIN_15) {
-                return NEW_CANLDE;
+                return NEW_CANDLE;
             } else {
                 return SAME_CANDLE;
             }
@@ -45,7 +43,7 @@ i32 Candle_check_time(Candle *f, Candle *s, Trade_time t) {
         } break;
         case C_MIN_30: {
             if (c_min == C_MIN_30) {
-                return NEW_CANLDE;
+                return NEW_CANDLE;
             } else {
                 return SAME_CANDLE;
             }
@@ -53,7 +51,7 @@ i32 Candle_check_time(Candle *f, Candle *s, Trade_time t) {
         } break;
         case C_MIN_60: {
             if (c_min == C_MIN_60) {
-                return NEW_CANLDE;
+                return NEW_CANDLE;
             } else {
                 return SAME_CANDLE;
             }

@@ -6,6 +6,9 @@
 #include "../../trader/headers/trader.h"
 #include "../../service/error_service/headers/trader_error.h"
 
+#define NEW_CANDLE 1
+#define SAME_CANDLE 0
+
 typedef enum {
     C_MIN_1 = 1, C_MIN_5 = 5, C_MIN_15 = 15, C_MIN_30 = 30, C_MIN_60 = 60
 } Trade_time;

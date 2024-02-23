@@ -5,14 +5,14 @@
 
 static PGconn *conn = NULL;
 
-i32 db_connectdb(str *con) {
+int db_connectdb(str *con) {
 
     conn = PQconnectdb(con->str);
     if (PQstatus(conn) != CONNECTION_OK) {
         fprintf(stderr, "Connection to db error %s", PQerrorMessage(conn));
     }
 
-    return 1;
+    return conn;
 }
 
 int db_insert_ticker_response(str *resp) {

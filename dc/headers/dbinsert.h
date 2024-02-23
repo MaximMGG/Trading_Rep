@@ -15,9 +15,9 @@ struct dbconn_info {
 };
 
 //init connect to db
-PGconn *db_connectdb(str *con);
+int db_connectdb(str *con);
 //free resourses
-void db_finish(PGconn *conn);
+void db_finish();
 
 //insert in db Response **resp
 int db_insert_ticker_response(str *resp);
