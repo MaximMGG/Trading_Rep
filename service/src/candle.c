@@ -110,12 +110,40 @@ QUOTE_CODE Quotes_update_lastcandle(Quotes *q, Candle *c) {
 
     return QUOTE_OK;
 }
+
 QUOTE_CODE Quotes_action(Quotes *q, Trade *trade) {
     if (q->strategy(q)) {
-        Trader_trade(trade);
-
+        if (!Trader_trade(trade)) {
+            Trader_print_error();
+        }
+        return QUOTE_OK;
+    } else {
+        return QUOTE_NONE;
     }
 }
 
-void Candle_free(Candle *c);
-void Quotes_destroy(Quotes *q);
+void Candle_free(Candle *c) {
+    if (c != NULL)
+        free(c);
+}
+
+void Quotes_destroy(Quotes *q) {
+    if (q != NULL) {
+        if (q->candles != NULL) {
+            for(int i = 0; i < q->candle_size; i++) {
+                Candle_free(q->candles[i]);
+            } 
+        }
+        free(q->candles);
+        q->candles = NULL;
+        str_free(q->ticker);
+        Trader_destory(q->trader);
+        q->ticker = NULL;
+        q->trader = NULL;
+        q->candle_size = 0;
+        q->max_candle_size = 0;
+        q->strategy = NULL;
+        free(q);
+    }
+}
+

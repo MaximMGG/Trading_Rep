@@ -11,7 +11,7 @@ typedef enum {
 } Trade_time;
 
 typedef enum {
-    QUOTE_OK, QUOTE_UD, QUOTE_ERROR = -1, QUOTE_MALLOC_ERROR
+    QUOTE_OK = 1, QUOTE_ERROR = -1, QUOTE_NONE
 } QUOTE_CODE;
 
 
