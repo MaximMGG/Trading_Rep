@@ -2,19 +2,28 @@
 
 
 
-Candle Candle_new(  double max_value, 
+Candle *Candle_new(  double max_value, 
                     double min_value, 
                     double open_price, 
+                    double close_price,
                     long open_time,
                     double current_price, 
-                    double value, 
+                    double volume, 
                     Trade_time c_time) {
-    Candle candle = {max_value, min_value, open_price, open_time, current_price, value, c_time};
+    Candle *candle = (Candle *) malloc(sizeof(Candle));
+    candle->max_value = max_value;
+    candle->min_value = min_value;
+    candle->open_price = open_price;
+    candle->close_price = close_price;
+    candle->current_price = current_price;
+    candle->volume = volume;
+    candle->c_time = c_time;
+
     return candle;
 }
 
-i32 Candle_check_time(Candle *f, Candle *s, Trade_time t) {
-    i32 c_min = ((s->open_time - f->open_time) / 60000) == C_MIN_1;
+i32 Candle_check_time(Candle *cur, Candle *new, Trade_time t) {
+    i32 c_min = ((new->open_time - cur->open_time) / 60000) == C_MIN_1;
     switch (t) {
         case C_MIN_1: {
             if (c_min == C_MIN_1) {
@@ -55,6 +64,9 @@ i32 Candle_check_time(Candle *f, Candle *s, Trade_time t) {
             }
         } break;
     }
+
+    cur->close_price = new->open_price;
+
     return 0;
 }
 

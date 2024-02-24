@@ -31,11 +31,11 @@ TRADER_CODE Trader_trade(Trade *trader) {
         return TRADER_OK;
     }
 
-    if (trader->tpredict->predict == TRADE_ON_BUY) {
+    if (trader->tpredict == TRADE_ON_BUY) {
         //Trader_long_trade(trader);
         printf("Buy at price %lf, trade size if %lf", trader->open_price, trader->size);
 
-    } else if (trader->tpredict->predict == TRADE_ON_SELL) {
+    } else if (trader->tpredict == TRADE_ON_SELL) {
         //Trader_short_trade(trader);
         printf("Sell at price %lf, trade size if %lf", trader->open_price, trader->size);
     }

@@ -5,17 +5,12 @@
 #include <util/util.h>
 
 typedef enum {
-    TRADE_ON_BUY, TRADE_ON_SELL, TRADE_NONE, TRADE_LONG, TRADE_SHORT
+    TRADE_ON_BUY, TRADE_ON_SELL, TRADE_NONE, TRADE_PLONG, TRADE_PSHORT
 } Trade_status;
 
 typedef enum {
     TRADER_OK = 1, TRADER_NOTE_TRADE, TRADER_ERROR = -1
 } TRADER_CODE;
-
-typedef struct {
-    Trade_status predict;
-
-} Trade_predict;
 
 typedef struct {
     double open_price;
@@ -26,7 +21,7 @@ typedef struct {
     boolean active;
 
     Trade_status tstatus;
-    Trade_predict *tpredict;
+    Trade_status tpredict;
     str *ticker;
 } Trade;
 
