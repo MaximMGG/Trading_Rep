@@ -45,9 +45,9 @@ int main(i32 argc, char **argv) {
     while(true) {
         for(int i = 0; i < app->quotes_size; i++) {
             Res_ticker *res = send_get_ticker_request(app->template[i]->ticker->str);
-            Candle new = Candle_new(0, 0, res->lastPrice, res->openTime, 0, res->lastPrice, res->volume, app->template[i]->t);
-            if (Candle_check_time(app->template[i]->candles[app->template[i]->candle_size - 1], &new, app->template[i]->t) == NEW_CANDLE) {
-                Quotes_add_candle(app->template[i], &new);
+            Candle *new = Candle_new(res->lastPrice, res->openTime, app->template[i]->t);
+            if (Candle_check_time(app->template[i]->candles[app->template[i]->candle_size - 1], new, app->template[i]->t) == NEW_CANDLE) {
+                Quotes_add_candle(app->template[i], new);
                 Quotes_action(app->template[i]);
                 data_distributor(res, app->template[i]->t);
             }

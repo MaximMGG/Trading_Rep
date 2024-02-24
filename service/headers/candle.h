@@ -19,9 +19,8 @@ typedef struct {
     double min_value;
     double open_price;
     double close_price;
+    double last_price;
     long open_time;
-    double current_price;
-    double volume;
     Trade_time c_time;
 } Candle;
 
@@ -29,13 +28,8 @@ typedef struct {
 //
 // } Tamplate;
 
-Candle *Candle_new(  double max_value, 
-                    double min_value, 
-                    double open_price, 
-                    double close_price,
+Candle *Candle_new( double open_price, 
                     long open_time,
-                    double current_price, 
-                    double volume, 
                     Trade_time c_time);
 
 i32 Candle_check_time(Candle *f, Candle *second, Trade_time t);
