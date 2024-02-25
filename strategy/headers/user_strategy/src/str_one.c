@@ -7,11 +7,18 @@ STRATEGY_CODE strategy_one_starter(Quotes *q) {
     }
     Candle *cur = q->candles[q->candle_size - 1];
     Candle *last = q->candles[q->candle_size - 2];
-    Trade *trader = Trader_create(q->ticker);
 
-    if((cur->open_price > last->open_price)
-        && last->close_price < last->open_price) {
-        trader->tpredict = TRADE_PLONG;
+    if (q->trade->active) {
+
+    } else {
+        Trade *trader = Trader_create(q->ticker);
+
+        if((cur->open_price > last->open_price)
+                && last->close_price < last->open_price) {
+            trader->tpredict = TRADE_PLONG;
+        } else if ((cur->open_price < last->open_price) && last->close_price > last->open_price) {
+            trader->tpredict = TRADE_PSHORT;
+        }
     }
 
     return 0;

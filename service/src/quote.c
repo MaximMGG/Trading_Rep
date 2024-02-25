@@ -1,4 +1,5 @@
 #include "../headers/quote.h"
+#include "../../trader/headers/trader.h"
 
 Quotes *Quotes_create(Trade_time t, i32 (*strategy) (Quotes *q), str *ticker) {
     Quotes *q = (Quotes *) malloc(sizeof(Quotes));
@@ -47,14 +48,14 @@ QUOTE_CODE Quotes_update_lastcandle(Quotes *q, Candle *c) {
         temp->min_value = c->min_value;
     }
 
-    temp->value = c->value;
-    temp->current_price = c->current_price;
+    temp->last_price = c->last_price;
 
     return QUOTE_OK;
 }
 
 QUOTE_CODE Quotes_action(Quotes *q) {
     if (q->strategy(q)) {
+        q->trade = Trader_create(q->ticker);
         if (!Trader_trade(q->trade)) {
             Trader_print_error();
         }

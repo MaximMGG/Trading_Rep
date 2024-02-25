@@ -24,20 +24,28 @@ TRADER_CODE Trader_trade(Trade *trader) {
     
         if (trader->tstatus == TRADE_ON_BUY) {
             trader->profit = (trader->close_price - trader->open_price) * trader->size; 
+            trader->tstatus = TRADE_NONE;
+            trader->active = false;
         } else if (trader->tstatus == TRADE_ON_SELL){
             trader->profit = (trader->close_price - trader->open_price) * trader->size * -1; 
+            trader->tstatus = TRADE_NONE;
+            trader->active = false;
         }
 
         return TRADER_OK;
     }
 
-    if (trader->tpredict == TRADE_ON_BUY) {
+    if (trader->tpredict == TRADE_PLONG) {
         //Trader_long_trade(trader);
         printf("Buy at price %lf, trade size if %lf", trader->open_price, trader->size);
+        trader->tstatus = TRADE_ON_BUY;
+        trader->active = true;
 
-    } else if (trader->tpredict == TRADE_ON_SELL) {
+    } else if (trader->tpredict == TRADE_PSHORT) {
         //Trader_short_trade(trader);
         printf("Sell at price %lf, trade size if %lf", trader->open_price, trader->size);
+        trader->tstatus = TRADE_ON_SELL;
+        trader->active = true;
     }
 
     return TRADER_OK;
